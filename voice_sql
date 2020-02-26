@@ -4,7 +4,7 @@ TRIM( substring(MSISDN,12,2)) as ROWID,
 MSISDN as MSISDN,
 Recordopeningtime,
 Recordclosingtime as DATEINDEX,
-CAST( substring(Recordclosingtime,1, 4) || '-' || substring(Recordclosingtime, 5, 2) || '-' || substring(Recordclosingtime, 7, 8) as VARCHAR(10)) as I_DATE,
+Recordclosingtime as I_DATE,
 Otherpartyaddress,
 Subscribertype,
 CASE 
