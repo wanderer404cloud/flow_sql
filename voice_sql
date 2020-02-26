@@ -1,0 +1,69 @@
+select RequestType,
+RecordType as ACCESS_FLAG,
+TRIM( substring(MSISDN,12,2)) as ROWID,
+MSISDN as MSISDN,
+Recordopeningtime,
+Recordclosingtime as DATEINDEX,
+CAST( substring(Recordclosingtime,1, 4) || '-' || substring(Recordclosingtime, 5, 2) || '-' || substring(Recordclosingtime, 7, 8) as VARCHAR(10)) as I_DATE,
+Otherpartyaddress,
+Subscribertype,
+CASE 
+WHEN Classification similar to 'NAT_ON' THEN '0'
+WHEN Classification similar to 'NAT_OFF' THEN '1'
+WHEN Classification similar to 'NAT_ONSA' THEN '2'
+WHEN Classification similar to 'NAT_FIX' THEN '3'
+WHEN Classification similar to 'NAT_FWA' THEN '4'
+ELSE ''
+END 
+as ONNET_OFFNET_FLAG,
+ServiceSubType,
+SessionID,
+IMSI,
+TransactionId,
+SubscriberID,
+RoamingCountry,
+AccumulatedChargeBalance/1000000 as MA_AMOUNT,
+AccumulatedChargeBalance/1000000 as TOTAL_AMOUNT,
+AccumulatedChargeBalance/1000000 as ALL_CHARGE,
+ResultCode,
+CASE 
+WHEN Classification similar to 'ROAM_LOCAL' THEN '0'
+WHEN Classification similar to 'ROAM_HOME' THEN '2'
+WHEN Classification similar to 'ROAM_ROW' THEN '3'
+WHEN Classification similar to 'IDD_.*|INT_ROW' THEN '1'
+WHEN Classification similar to 'ROAM_MT' THEN '4'
+ELSE ''
+END 
+as ROAMING_FLAG,
+CASE 
+WHEN Classification similar to 'c0|dcbj.*|music_digi.*' THEN '100'
+WHEN Classification similar to '1_SMS_10000_0|rw_.*|wintheheart60' THEN '102'
+WHEN Classification similar to 'D.*|K550|S.*|USO0' THEN '103'
+WHEN Classification similar to 'CC300|V1.*|V2.*|Vrf.*|Vs.*|USO1' THEN '104'
+WHEN Classification similar to 'b0|b1.*|b2.*|b5.*|b750|b8.*|b900|balancequery_edc|bank.*|cash.*|financial.*|info.*|payment_edc|purchase_edc|realtimetransfer_edc' THEN '105'
+WHEN Classification similar to 'dcbsmule.*' THEN '106'
+WHEN Classification similar to 'Onnet' THEN '107'
+ELSE ''
+END 
+as OTHER_FLAG,
+RecordType as CAT_ID,
+FirstCallFlag,
+CASE 
+WHEN Directiontype similar to 'ORIGINATING_ROLE' THEN '0'
+WHEN Directiontype similar to 'TERMINATING_ROLE' THEN '1'
+WHEN Directiontype similar to 'FORWARDING_ROLE' THEN '2'
+ELSE ''
+END 
+as Directiontype,
+AccumulatedOutBundle,
+AccumulatedInBundle,
+AccumulatedUsageBalance,
+'${filename}' as I_FILE_NAME,
+'${now():format('yyyy-MM-dd HH:mm:ss')}' as I_CREATE_DATE
+from flowfile
+where
+MSISDN LIKE '628%'
+and
+RecordType = '2'
+and
+RequestType LIKE 'TERMINATION_REQUEST%'
