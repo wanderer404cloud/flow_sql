@@ -1,3 +1,7 @@
+/DATEINDEX : ${field.value:append('000'):format('yyyy-MM-dd HH:mm:ss')}
+/Recordopeningtime : ${field.value:append('000'):format('yyyy-MM-dd HH:mm:ss')}
+
+
 select RequestType,
 RecordType as ACCESS_FLAG,
 TRIM( substring(MSISDN,12,2)) as ROWID,
