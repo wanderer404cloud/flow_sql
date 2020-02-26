@@ -1,4 +1,4 @@
-/DATEINDEX : ${field.value:append('000'):format('yyyy-MM-dd HH:mm:ss')}
+/DATEINDEX : ${field.value:append('000'):format('yyyyMMdd')}
 /Recordopeningtime : ${field.value:append('000'):format('yyyy-MM-dd HH:mm:ss')}
 
 
